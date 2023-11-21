@@ -74,11 +74,11 @@ const App = () => {
 
   return (
     <div className="App">
-      <div className="header">
-        <h1>Pomodoro Study Timer</h1>
-        <p>based on the Pomodoro study technique</p> 
-      </div>
-      <div className="hero">
+      <div className="pg1">
+        <div className="header">
+          <h1>Pomodoro Study Timer</h1>
+          <p className='header-p'>based on the Pomodoro study technique</p> 
+        </div>
         <div>
           <button onClick={() => handleTimerClick(25, 'Study')}>Study</button>
           <button onClick={() => handleTimerClick(5, 'Short Break')}>Short Break</button>
@@ -95,19 +95,19 @@ const App = () => {
           />
         </div>
         <div className='interface'>
-          <button onClick={handlePause}className='icons'><Icon icon="material-symbols:pause-rounded" /></button>
-          <button onClick={handleStart}className='icons'><Icon icon="material-symbols:play-arrow-rounded" /></button>
-          <button onClick={handleReset}className='icons'><Icon icon="material-symbols:restart-alt-rounded"  className='icon'/></button>
+          <button onClick={handlePause}className='icons'><Icon icon="material-symbols:pause-rounded" color="#f6f5ff" width="36" height="36"/></button>
+          <button onClick={handleStart}className='icons'><Icon icon="material-symbols:play-arrow-rounded" color="#f6f5ff" width="36" height="36"/></button>
+          <button onClick={handleReset}className='icons'><Icon icon="material-symbols:restart-alt-rounded" color="#f6f5ff" width="36" height="36" /></button>
         </div>
         <div>
           <p>Time Elapsed: {timeSpent} / 150 minutes</p>
         </div>
       </div>
-      <div className='pst'>
+      <div className='pg2'>
         <h2>Pomodoro Study Technique</h2>
         <div className='technique'>
           <div className='item-container'>
-            {/* {icon} */}
+            <Icon icon="lucide:list-todo" />
             Select task to accomplish
           </div>
           <div className='item-container'>
