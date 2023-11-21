@@ -1,0 +1,41 @@
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: #BAB4FF;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+
+}
+
+h1 {
+  font-family: 'Sacramento', cursive;
+  /* background-color: #f0f0f0; */
+
+}
+
+button {
+  font-family: 'Outfit', sans-serif;
+  border-radius: 16px;
+
+  width: 6em;
+}
+/* 
+.hero {
+  align-content: center;
+}
+
+.interface {
+  display: flex;
+}
+
+.icon {
+  height: 3em;
+  width: 3em; 
+  border-radius: ;
+} */
+
+.pst {
+  
+}
