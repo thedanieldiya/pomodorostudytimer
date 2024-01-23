@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import Timer from './Timer';
 import "./App.css";
 import {Icon} from '@iconify/react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const App = () => {
   const [timeSpent, setTimeSpent] = useState(0);
@@ -71,6 +74,13 @@ const App = () => {
     setSessionCount(0);
   };
 
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
 
   return (
     <div className="App">
@@ -120,14 +130,40 @@ const App = () => {
             Take a short 5 minutes break
           </div>
           <div className='item-container'>
-            {/* {icon} */}
+            <Icon icon="material-symbols:restart-alt-rounded"  width="72" height="72" />
+            <br></br>
             Repeat for 4 rounds
           </div>
           <div className='item-container'>
             {/* {icon} */}
             Take a long 30 minutes break
           </div>
+          
         </div>
+        <Slider {...settings} className='carousel'>
+            <div className='item-container'>
+              <Icon icon="lucide:list-todo" width="72" height="72"/>
+              <br></br>
+              Select task to accomplish
+            </div>
+            <div className='item-container'>
+              {/* {icon} */}
+              Study for 25 minutes
+            </div>
+            <div className='item-container'>
+              {/* {icon} */}
+              Take a short 5 minutes break
+            </div>
+            <div className='item-container'>
+              <Icon icon="material-symbols:restart-alt-rounded"  width="72" height="72" />
+              <br></br>
+              Repeat for 4 rounds
+            </div>
+            <div className='item-container'>
+              {/* {icon} */}
+              Take a long 30 minutes break
+            </div>
+          </Slider>
         <div className='footer'>
           <p className='footer-text'>developed with ❤ using ReactJs</p>
           <p className='footer-text'>2024, thedanieldiya.</p>
