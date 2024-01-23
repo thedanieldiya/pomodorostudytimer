@@ -74,12 +74,12 @@ const App = () => {
 
   return (
     <div className="App">
-      <div className="pg1">
+      <div className="pages" id='pg1'>
         <div className="header">
-          <h1>Pomodoro Study Timer</h1>
-          <p className='header-p'>based on the Pomodoro study technique</p> 
+          <h1>Study Timer</h1>
+          <p>based on the Pomodoro study technique</p> 
         </div>
-        <div>
+        <div className='modebtn'>
           <button onClick={() => handleTimerClick(25, 'Study')}>Study</button>
           <button onClick={() => handleTimerClick(5, 'Short Break')}>Short Break</button>
           <button onClick={() => handleTimerClick(30, 'Long Break')}>Long Break</button>
@@ -97,17 +97,18 @@ const App = () => {
         <div className='interface'>
           <button onClick={handlePause}className='icons'><Icon icon="material-symbols:pause-rounded" color="#f6f5ff" width="36" height="36"/></button>
           <button onClick={handleStart}className='icons'><Icon icon="material-symbols:play-arrow-rounded" color="#f6f5ff" width="36" height="36"/></button>
-          <button onClick={handleReset}className='icons'><Icon icon="material-symbols:restart-alt-rounded" color="#f6f5ff" width="36" height="36" /></button>
+          <button onClick={handleReset}className='icons'><Icon icon="material-symbols:restart-alt-rounded" color="#f6f5ff" width="36" height="36" margin-left="-30px"/></button>
         </div>
         <div>
           <p>Time Elapsed: {timeSpent} / 150 minutes</p>
         </div>
       </div>
-      <div className='pg2'>
+      <div className='pages' id='pg2'>
         <h2>Pomodoro Study Technique</h2>
         <div className='technique'>
           <div className='item-container'>
-            <Icon icon="lucide:list-todo" />
+            <Icon icon="lucide:list-todo" width="72" height="72"/>
+            <br></br>
             Select task to accomplish
           </div>
           <div className='item-container'>
@@ -126,6 +127,10 @@ const App = () => {
             {/* {icon} */}
             Take a long 30 minutes break
           </div>
+        </div>
+        <div className='footer'>
+          <p className='footer-text'>developed with ❤ using ReactJs</p>
+          <p className='footer-text'>2024, thedanieldiya.</p>
         </div>
       </div>
     </div>
