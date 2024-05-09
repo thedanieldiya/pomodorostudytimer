@@ -1,173 +1,105 @@
-import React, { useState, useEffect, useRef } from 'react';
-import Timer from './Timer';
-import "./App.css";
-import {Icon} from '@iconify/react';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import React, { useState, useEffect } from 'react';
+import './App.css';
 
 const App = () => {
-  const [timeSpent, setTimeSpent] = useState(0);
-  const [activeTimer, setActiveTimer] = useState({ duration: 25, label: 'Study' });
-  const [timerActive, setTimerActive] = useState(false);
-  const [sessionCount, setSessionCount] = useState(0);
-  const timerRef = useRef(null);
-
+  // State variables to manage mode, timer, sequence count, and pause state
+  const [mode, setMode] = useState('study'); // Current mode: study, shortBreak, or longBreak
+  const [time, setTime] = useState(25 * 60); // Initial time for study mode: 25 minutes
+  const [sequenceCount, setSequenceCount] = useState(0); // Keeps track of sequence count
+  const [isPaused, setIsPaused] = useState(true); // Keeps track of whether timer is paused or not
 
   useEffect(() => {
-    if (timerActive) {
-      timerRef.current = setInterval(() => {
-        setTimeSpent((prevTime) => prevTime + 1);
-      }, 60000); 
-    } else {
-      clearInterval(timerRef.current);
+    let interval;
+    // Timer logic
+    if (!isPaused) {
+      interval = setInterval(() => {
+        setTime(prevTime => {
+          if (prevTime > 0) {
+            // Decrease time by 1 second if time is greater than 0
+            return prevTime - 1;
+          } else {
+            // Switch mode and reset time when the timer reaches 0
+            switch (mode) {
+              case 'study':
+                if (sequenceCount < 3) {
+                  // Switch to short break after completing study mode for 4 times
+                  setMode('shortBreak');
+                  setTime(5 * 60); // Set time for short break
+                  setSequenceCount(prevCount => prevCount + 1);
+                } else {
+                  // Switch to long break after completing study mode for 4 times
+                  setMode('longBreak');
+                  setTime(30 * 60); // Set time for long break
+                  setSequenceCount(0); // Reset sequence count
+                }
+                break;
+              case 'shortBreak':
+                // Switch to study mode after short break
+                setMode('study');
+                setTime(25 * 60); // Set time for study mode
+                break;
+              case 'longBreak':
+                // Switch to study mode after long break
+                setMode('study');
+                setTime(25 * 60); // Set time for study mode
+                break;
+              default:
+                break;
+            }
+          }
+        });
+      }, 1000); // Update every second
     }
 
-    return () => clearInterval(timerRef.current);
-  }, [timerActive]);
+    // Cleanup function to clear interval when component unmounts or when timer is paused
+    return () => clearInterval(interval);
+  }, [isPaused, mode, sequenceCount]);
 
-
-  const handleTimerClick = (duration, label) => {
-    setActiveTimer({ duration, label });
-    setTimerActive(true);
+  // Function to handle mode changes when mode buttons are clicked
+  const handleModeChange = (newMode) => {
+    setIsPaused(true); // Pause the timer when mode is changed
+    // Update mode and time based on the button clicked
+    if (newMode === 'study') {
+      setSequenceCount(0); // Initialize sequence count for a new study session
+    } else {
+      setSequenceCount(sequenceCount + 1); // Increment sequence count for short or long break
+    }
+    setMode(newMode); // Set new mode
+    setTime(newMode === 'study' ? 25 * 60 : newMode === 'shortBreak' ? 5 * 60 : 30 * 60); // Set time based on mode
   };
 
-
-  const handleTimeUp = (label) => {
-    if (label === 'Study') {
-      setTimeSpent((prevTime) => prevTime + 25);
-      setSessionCount((prevCount) => prevCount + 1);
-
-      if (sessionCount < 3) {
-        setActiveTimer({ duration: 5, label: 'Short Break' });
-      } else {
-        setActiveTimer({ duration: 30, label: 'Long Break' });
-        setSessionCount(0); 
-      }
-    } else if (label === 'Short Break') {
-      setActiveTimer({ duration: 25, label: 'Study' });
-    } else if (label === 'Long Break') {
-      setActiveTimer({ duration: 25, label: 'Study' });
-    }   
-
-    // setActiveTimer(null);
-    setTimerActive(false);
+  // Function to handle play/pause button click
+  const handlePlayPause = () => {
+    setIsPaused(prevPaused => !prevPaused); // Toggle pause state
   };
 
-  const handleStart = () => {
-    setTimerActive(true);
-  };
-
-  const handlePause = () => {
-    setTimerActive(false);
-  };
-
+  // Function to handle reset button click
   const handleReset = () => {
-    setTimerActive(false);
-    setTimeSpent(0);
-
-    if (activeTimer?.label === 'Study') {
-      setActiveTimer(null);
-    } else {
-      setActiveTimer({ duration: 25, label: 'Study' });
-    }
-    setSessionCount(0);
+    setIsPaused(true); // Pause the timer
+    setMode('study'); // Reset mode to study
+    setTime(25 * 60); // Reset time to 25 minutes
+    setSequenceCount(0); // Reset sequence count
   };
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-  };
-
+  // JSX structure for the app UI
   return (
-    <div className="App">
-      <div className="pages" id='pg1'>
-        <div className="header">
-          <h1>Study Timer</h1>
-          <p>based on the Pomodoro study technique</p> 
-        </div>
-        <div className='modebtn'>
-          <button onClick={() => handleTimerClick(25, 'Study')}>Study</button>
-          <button onClick={() => handleTimerClick(5, 'Short Break')}>Short Break</button>
-          <button onClick={() => handleTimerClick(30, 'Long Break')}>Long Break</button>
-        </div>
-        <div className='timer'>
-          <Timer
-            duration={activeTimer?.duration || 25}
-            label={activeTimer?.label || 'Study'}
-            isActive={timerActive}
-            onStart={handleStart}
-            onPause={handlePause}
-            onTimeUp={handleTimeUp}
-          />
-        </div>
-        <div className='interface'>
-          <button onClick={handlePause}className='icons'><Icon icon="material-symbols:pause-rounded" color="#f6f5ff" width="36" height="36"/></button>
-          <button onClick={handleStart}className='icons'><Icon icon="material-symbols:play-arrow-rounded" color="#f6f5ff" width="36" height="36"/></button>
-          <button onClick={handleReset}className='icons'><Icon icon="material-symbols:restart-alt-rounded" color="#f6f5ff" width="36" height="36" margin-left="-30px"/></button>
-        </div>
-        <div>
-          <p>Time Elapsed: {timeSpent} / 150 minutes</p>
-        </div>
+    <div className='app'>
+      <div className='mode__buttons'>
+        {/* Mode buttons */}
+        <button onClick={() => handleModeChange('study')} disabled={mode === 'study'}>Study</button>
+        <button onClick={() => handleModeChange('shortBreak')} disabled={mode === 'shortBreak'}>Short Break</button>
+        <button onClick={() => handleModeChange('longBreak')} disabled={mode === 'longBreak'}>Long Break</button>
       </div>
-      <div className='pages' id='pg2'>
-        <h2>Pomodoro Study Technique</h2>
-        <div className='technique'>
-          <div className='item-container'>
-            <Icon icon="lucide:list-todo" width="72" height="72"/>
-            <br></br>
-            Select task to accomplish
-          </div>
-          <div className='item-container'>
-            {/* {icon} */}
-            Study for 25 minutes
-          </div>
-          <div className='item-container'>
-            {/* {icon} */}
-            Take a short 5 minutes break
-          </div>
-          <div className='item-container'>
-            <Icon icon="material-symbols:restart-alt-rounded"  width="72" height="72" />
-            <br></br>
-            Repeat for 4 rounds
-          </div>
-          <div className='item-container'>
-            {/* {icon} */}
-            Take a long 30 minutes break
-          </div>
-          
-        </div>
-        <Slider {...settings} className='carousel'>
-            <div className='item-container'>
-              <Icon icon="lucide:list-todo" width="72" height="72"/>
-              <br></br>
-              Select task to accomplish
-            </div>
-            <div className='item-container'>
-              {/* {icon} */}
-              Study for 25 minutes
-            </div>
-            <div className='item-container'>
-              {/* {icon} */}
-              Take a short 5 minutes break
-            </div>
-            <div className='item-container'>
-              <Icon icon="material-symbols:restart-alt-rounded"  width="72" height="72" />
-              <br></br>
-              Repeat for 4 rounds
-            </div>
-            <div className='item-container'>
-              {/* {icon} */}
-              Take a long 30 minutes break
-            </div>
-          </Slider>
-        <div className='footer'>
-          <p className='footer-text'>developed with ❤ using ReactJs</p>
-          <p className='footer-text'>2024, thedanieldiya.</p>
-        </div>
+      <div className='timer'>
+        {/* Timer display */}
+        {`${Math.floor(time / 60)
+          .toString()
+          .padStart(2, '0')}:${(time % 60).toString().padStart(2, '0')}`}
+      </div>
+      <div className="control__buttons">
+        {/* Control buttons */}
+        <button onClick={handlePlayPause}>{isPaused ? 'Play' : 'Pause'}</button>
+        <button onClick={handleReset}>Reset</button>
       </div>
     </div>
   );

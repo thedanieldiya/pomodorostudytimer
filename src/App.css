@@ -2,25 +2,27 @@
 body {
   font-family: 'Outfit', sans-serif;
   background-color: #BAB4FF;
-  text-align: center;
+  /* text-align: center; */
   font-size: 16px;
   margin: 0;
   padding: 0;
-  position: relative;
+  /* position: relative; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
 }
 
-.App {
-  height: 200vh;
-  scroll-snap-type: y mandatory;
+.app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.pages {
-  height: 100vh;
-  /* width: 100%; */
-  /* font-size: 2em; */
-  scroll-snap-align: start;
-  border-bottom: 1px solid #ccc;
+.timer {
+  font-size: 128px;
 }
 
 h1 {
@@ -87,7 +89,7 @@ button:active {
 }
 
 #pg1 {
-  height: 100vh;
+  /* height: 100vh; */
   margin: 0;
 }
 
@@ -126,12 +128,12 @@ button:active {
 .item-container {
   float: left;
   width: 12.5%;
-  height: 35vh;
+  /* height: 30vh; */
   /* margin: 0 auto; */
   margin: 2%;
   margin-bottom: 20px;
-  padding: 20px;
-  padding-top: 60px;
+  padding: 40px 20px;
+  /* padding-top: 60px; */
   font-size: 24px;
   border: black;
   border-radius: 30px;
@@ -177,9 +179,9 @@ button:active {
     margin: -20px;
   }
 
-  #pg2{
-    /* margin: -20px; */
-  }
+  /* #pg2{
+    margin: -20px;
+  } */
 
   .technique{
     display: none;
@@ -192,10 +194,17 @@ button:active {
     display: none;
   } */
 
-  .item-container{
-    width: 55%;
-    height: 50vh;
-    /* padding: 60px; */
-    margin: 0, auto;
+  .itemContainer{
+    width: 150px;
+    height: 35vh;
+    /* padding: -30px; */
+    margin: 50px 50px;
+    font-size: 24px;
+    border: black;
+    border-radius: 30px;
+    align-items: center;
+    background-color: #bab4ff;
+    box-shadow:  5px 5px 11px #9e99d9,
+                -5px -5px 11px #d6cfff;
   }
 }
