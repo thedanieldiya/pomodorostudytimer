@@ -180,7 +180,7 @@ const App = () => {
           </div>
         </div>
         <div className='app__footer'>
-          <p>Developed with ❤ for Àdùké</p>
+          <p>Developed with 💜 for Àdùké</p>
         </div>
       </div>
     </ThemeContext.Provider> 
